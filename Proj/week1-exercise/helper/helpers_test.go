@@ -1,6 +1,10 @@
 package helper
 
-import "testing"
+import (
+	"fmt"
+	"reflect"
+	"testing"
+)
 
 func TestIsEmpty(t *testing.T) {
 	var mySclice []int
@@ -10,5 +14,16 @@ func TestIsEmpty(t *testing.T) {
 	actual := IsEmpty(mySclice)
 	if actual != expected {
 		t.Error("Result should be false")
+	}
+}
+
+func TestIsEmpty_yesEmpty(t *testing.T) {
+	var mySclice []int
+
+	fmt.Println(reflect.ValueOf(mySclice))
+	expected := true
+	actual := IsEmpty(mySclice)
+	if actual != expected {
+		t.Error("actual should be true")
 	}
 }
