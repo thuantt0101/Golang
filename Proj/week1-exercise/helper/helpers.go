@@ -41,3 +41,32 @@ func IsEmpty(obj interface{}) bool {
 	}
 	return result
 }
+
+/*
+	Consider whether or not value is contained in list
+*/
+func ContainsInt(list []int, value int) bool {
+	result := false
+
+	for _, v := range list {
+		if v == value {
+			result = true
+			break
+		}
+	}
+	return result
+}
+
+/*
+ */
+func ContainsString(list []string, value string) bool {
+	result := false
+	for i := 0; i < len(list); i++ {
+		if value == list[i] {
+			result = true
+			break
+		}
+
+	}
+	return result
+}
