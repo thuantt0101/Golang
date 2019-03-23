@@ -67,6 +67,9 @@ func ContainsString(list []string, value string) bool {
 			break
 		}
 
+		//tran thanh thuan
 	}
 	return result
 }
+
+//2019-03-23
