@@ -8,39 +8,39 @@ import (
 	_ "github.com/jinzhu/gorm/dialects/mysql"
 )
 
-type Note struct {
-	gorm.Model
-	Title     string
-	Completed bool
-	Creator   int
-	noteID    int
-}
+var (
+	db *gorm.DB
+)
 
-type User struct {
-	gorm.Model
-	Id   int
-	Name string
-}
+type (
+	Note struct {
+		gorm.Model
+		Id        int
+		Name      string
+		IdCreater string
+	}
+	User struct {
+		gorm.Model
+		Id   int
+		Name string
+	}
+)
 
-//Trả về con trỏ với kiểu dữ liệu là Struct Note và biến error
-func findNote(db *gorm.DB, id int) (*Note, error) {
-	//new ở đây là new một con trỏ
+func getNote(db *gorm.DB, id int) (*Note, error) {
 	note := new(Note)
-	//Toán tử & được sử dụng để lấy địa chỉ của một biến
-	//.First: find note
-	//tìm note trong db với id và gán cho con trỏ note
-	// Get first matched record
-
-	err := db.Where("noteID=?", id).First(&note).Error
-	//// SELECT * FROM note WHERE noteID = id limit 1;
+	err := db.Where("id = ?", id).First(&note).Error
 
 	return note, err
 }
 
-func findCreator(db *gorm.DB, id int) (*User, error) {
-	creator := new(User)
-	err := db.Where("Id = ?", id).First(&creator).Error
-	return creator, err
+func getCreator(db *gorm.DB, id int) (*User, error) {
+	user := new(User)
+	err := db.Where("id = ?", id).First(&user).Error
+
+	return user, err
+}
+
+func init() {
 }
 
 func main() {
@@ -49,42 +49,34 @@ func main() {
 		panic("failed to connect database")
 	}
 
-	defer db.Close()
+	//defer db.Close()
 
 	//Migrate the schema
 	db.AutoMigrate(&Note{}, &User{})
 
-	wg := new(sync.WaitGroup)
 	//noteID := 1
 	creatorID := 1
 
-	//note := new(Note)
-	//wg.Add(1)
+	note := &Note{}
+	user := &User{}
 
-	//go rountine
-	//go func() {
-	//	defer wg.Done()
-	//	note, _ = findNote(db, noteID)
-	//}()
+	wg := new(sync.WaitGroup)
+	wg.Add(1)
 
-	creator := new(User)
+	go func() {
+		defer wg.Done()
+		note, _ = getNote(db, creatorID)
+	}()
 
 	wg.Add(1)
 	go func() {
 		defer wg.Done()
-		creator, _ = findCreator(db, creatorID)
+		user, _ = getCreator(db, creatorID)
 	}()
 
 	wg.Wait()
 
-	//fmt.Println("note:", note)
-
-	fmt.Println("creator:", creator)
-
-	if creator == nil {
-		fmt.Println("creator is nil")
-	}
-
-	fmt.Println("name:", creator.Name)
-
+	fmt.Println("note", note)
+	fmt.Println("user", user)
+	fmt.Println("abc", note.Name)
 }
