@@ -46,6 +46,7 @@ func init() {
 }
 
 func main() {
+	fmt.Println("Trần thanh thuận")
 	db, err := gorm.Open("mysql", "root:123456@/notes?charset=utf8&parseTime=True&loc=Local")
 	if err != nil {
 		panic("failed to connect database")
