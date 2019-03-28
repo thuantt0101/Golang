@@ -19,6 +19,7 @@ type (
 		Name      string
 		IdCreater string
 	}
+	
 	User struct {
 		gorm.Model
 		Id   int
