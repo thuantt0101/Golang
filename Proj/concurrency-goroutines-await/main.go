@@ -4,6 +4,8 @@ import (
 	"fmt"
 	"sync"
 
+	pp "github.com/k0kubun/pp"
+
 	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/mysql"
 )
@@ -77,6 +79,16 @@ func main() {
 	}()
 
 	wg.Wait()
+
+	//check table 'users' exists or not
+	if db.HasTable("users") {
+		pp.Println("users table is exists")
+	}
+
+	//check model 'users' table eixsts or not
+	if db.HasTable(&User{}) {
+		pp.Println("Users model is exists")
+	}
 
 	fmt.Println("note", note)
 	fmt.Println("user", user)
